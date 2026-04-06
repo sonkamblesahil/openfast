@@ -15,7 +15,7 @@ set "OverallErrorLevel=0"
 
 
 echo "Build all projects (Release|64)"
-devenv vs-build/OpenFAST.sln /Build "Release|x64"
+devenv vs-build/OpenFAST.sln /Build "Debug|x64"
 if %ERRORLEVEL% NEQ 0 (
     set "FailedSolutions=!FailedSolutions!Release  "
     set "OverallErrorLevel=1"
@@ -24,20 +24,20 @@ if %ERRORLEVEL% NEQ 0 (
 
 
 echo "Build all OpenMP projects (OpenMP_Release|64)"
-devenv vs-build/OpenFAST.sln /Build "OpenMP_Release|x64"
+devenv vs-build/OpenFAST.sln /Build "OpenMP_Debug|x64"
 if %ERRORLEVEL% NEQ 0 (
-    set "FailedSolutions=!FailedSolutions!OpenMP_Release  "
+    set "FailedSolutions=!FailedSolutions!OpenMP_Debuge  "
     set "OverallErrorLevel=1"
-    echo Build of OpenFAST.sln OpenMP_Release failed!
+    echo Build of OpenFAST.sln OpenMP_Debug failed!
 )
 
 
-echo "Build OpenFAST-Simulink shared library (Matlab_Release|x64)"
-devenv vs-build/OpenFAST.sln /Build "Matlab_Release|x64"
+echo "Build OpenFAST-Simulink shared library (Matlab_Debug|x64)"
+devenv vs-build/OpenFAST.sln /Build "Matlab_Debug|x64"
 if %ERRORLEVEL% NEQ 0 (
-    set "FailedSolutions=!FailedSolutions!Matlab_Release  "
+    set "FailedSolutions=!FailedSolutions!Matlab_Debug  "
     set "OverallErrorLevel=1"
-    echo Build of OpenFAST.sln Matlab_Release failed!
+    echo Build of OpenFAST.sln Matlab_Debug failed!
 )
 
 
@@ -54,7 +54,7 @@ setlocal enabledelayedexpansion
 
 cd /d build\bin || exit /b 1
 
-for %%F in (*_Release*) do (
+for %%F in (*_Debug*) do (
     set "name=%%~nxF"
     set "newname=!name:_Release=!"
     if not "!name!"=="!newname!" (
