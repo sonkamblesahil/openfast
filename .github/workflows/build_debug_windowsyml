@@ -1,0 +1,33 @@
+name: Build OpenFAST Debug EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-debug:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup Intel oneAPI
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat" 2022
+
+      - name: Build Debug OpenFAST
+        shell: cmd
+        run: |
+          call .github\scripts\build_windows_executables.bat
+
+      - name: Upload Debug EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: openfast-debug-exe
+          path: build/bin/*.exe
