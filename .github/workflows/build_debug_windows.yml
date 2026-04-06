@@ -2,32 +2,29 @@ name: Build OpenFAST Debug EXE
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 jobs:
   build-debug:
     runs-on: windows-2022
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
+      - uses: microsoft/setup-msbuild@v2
 
-      - name: Setup Intel oneAPI
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Intel\oneAPI\setvars-vcvarsall.bat" 2022
+      - name: Install Intel oneAPI Fortran
+        uses: modflowpy/install-intelfortran-action@v1
+        with:
+          compiler-variant: intel-classic
+          architecture: intel64
 
       - name: Build Debug OpenFAST
         shell: cmd
         run: |
-          call .github\scripts\build_windows_executables.bat
+          devenv vs-build/OpenFAST.sln /Build "Debug|x64"
 
-      - name: Upload Debug EXE
+      - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: openfast-debug-exe
+          name: openfast-debug
           path: build/bin/*.exe
