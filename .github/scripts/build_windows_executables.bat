@@ -14,19 +14,19 @@ set "FailedSolutions="
 set "OverallErrorLevel=0"
 
 
-echo "Build all projects (Release|64)"
+echo "Build all projects (Debug|x64)"
 devenv vs-build/OpenFAST.sln /Build "Debug|x64"
 if %ERRORLEVEL% NEQ 0 (
-    set "FailedSolutions=!FailedSolutions!Release  "
+    set "FailedSolutions=!FailedSolutions!Debug  "
     set "OverallErrorLevel=1"
-    echo Build of OpenFAST.sln Release failed!
+    echo Build of OpenFAST.sln Debug failed!
 )
 
 
-echo "Build all OpenMP projects (OpenMP_Release|64)"
+echo "Build all OpenMP projects (OpenMP_Debug|x64)"
 devenv vs-build/OpenFAST.sln /Build "OpenMP_Debug|x64"
 if %ERRORLEVEL% NEQ 0 (
-    set "FailedSolutions=!FailedSolutions!OpenMP_Debuge  "
+    set "FailedSolutions=!FailedSolutions!OpenMP_Debug  "
     set "OverallErrorLevel=1"
     echo Build of OpenFAST.sln OpenMP_Debug failed!
 )
@@ -56,7 +56,7 @@ cd /d build\bin || exit /b 1
 
 for %%F in (*_Debug*) do (
     set "name=%%~nxF"
-    set "newname=!name:_Release=!"
+    set "newname=!name:_Debug=!"
     if not "!name!"=="!newname!" (
         ren "%%F" "!newname!"
     )
